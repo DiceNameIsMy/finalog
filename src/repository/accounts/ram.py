@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 import uuid
 
@@ -66,4 +66,5 @@ class RAMAccountRepository(base.AccountRepository):
         return uuid.uuid4()
 
     def _get_created_at_date(self) -> datetime:
-        return datetime.now()
+        unaware_utc_timestamp = datetime.utcnow()
+        return unaware_utc_timestamp.replace(tzinfo=timezone.utc)
