@@ -64,3 +64,27 @@ def test_add_operation(
     assert repo_operation is not None
     assert repo_operation.amount == opertaion.amount
     assert repo_operation.created_at == opertaion.created_at
+
+
+class TestBalance:
+    def test_empty(_, account_domain: domain.AccountDomain):
+        balance = account_domain.get_balance()
+        assert balance == Decimal("0.00")
+
+    def test_(
+        _,
+        account_domain: domain.AccountDomain,
+        operation: domain.schemes.Operation,
+        operation2: domain.schemes.Operation,
+    ):
+        balance = account_domain.get_balance()
+        assert balance == sum((operation.amount, operation2.amount), Decimal("0.00"))
+
+    def test_negative(
+        _,
+        account_domain: domain.AccountDomain,
+        negative_operation: domain.schemes.Operation,
+    ):
+        balance = account_domain.get_balance()
+        assert balance < Decimal("0.00")
+        assert balance == negative_operation.amount

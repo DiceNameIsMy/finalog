@@ -32,3 +32,21 @@ def operation(
     amount = Decimal("1.99")
     operation = account_repo.add_operation(account_id, amount)
     return domain.schemes.Operation.from_repo(operation)
+
+
+@pytest.fixture()
+def operation2(
+    account_id: uuid.UUID, account_repo: repository.AccountRepository
+) -> domain.schemes.Operation:
+    amount = Decimal("10.00")
+    operation = account_repo.add_operation(account_id, amount)
+    return domain.schemes.Operation.from_repo(operation)
+
+
+@pytest.fixture()
+def negative_operation(
+    account_id: uuid.UUID, account_repo: repository.AccountRepository
+) -> domain.schemes.Operation:
+    amount = Decimal("-10.00")
+    operation = account_repo.add_operation(account_id, amount)
+    return domain.schemes.Operation.from_repo(operation)
