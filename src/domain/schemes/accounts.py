@@ -10,6 +10,7 @@ import repository as repo
 class Account:
     id: UUID
     name: str
+    currency: repo.enums.Currency
     created_at: datetime
 
     @classmethod
@@ -17,4 +18,9 @@ class Account:
         cls,
         repo_acc: repo.schemes.Account,
     ) -> Self:  # type: ignore[valid-type]
-        return cls(id=repo_acc.id, name=repo_acc.name, created_at=repo_acc.created_at)
+        return cls(
+            id=repo_acc.id,
+            name=repo_acc.name,
+            currency=repo_acc.currency,
+            created_at=repo_acc.created_at,
+        )

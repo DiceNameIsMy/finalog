@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import uuid
 from decimal import Decimal
 
-from repository import schemes
+from repository import schemes, enums
 
 
 class AccountRepository(ABC):
@@ -15,7 +15,7 @@ class AccountRepository(ABC):
         pass
 
     @abstractmethod
-    def create_account(self, name: str) -> schemes.Account:
+    def create_account(self, name: str, currency: enums.Currency) -> schemes.Account:
         pass
 
     #
