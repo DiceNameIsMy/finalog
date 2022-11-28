@@ -1,2 +1,2 @@
-from . import exc, schemes, accounts
-from .accounts.account import AccountDomain
+from . import exc, schemes
+from .account import AccountDomain
