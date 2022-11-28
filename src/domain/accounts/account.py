@@ -39,8 +39,8 @@ class AccountDomain:
         return [schemes.Operation.from_repo(oper) for oper in repo_operations]
 
     def get_balance(self) -> Decimal:
-        opertaions = self.repository.list_operations()
-        balance = sum([oper.amount for oper in opertaions], start=Decimal("0.00"))
+        repo_opertaions = self.repository.list_operations()
+        balance = sum([oper.amount for oper in repo_opertaions], start=Decimal("0.00"))
         return balance
 
     def remove_operation(self, id: uuid.UUID) -> None:
