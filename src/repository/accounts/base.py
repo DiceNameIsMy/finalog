@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 import uuid
 from decimal import Decimal
 
@@ -31,7 +32,9 @@ class AccountRepository(ABC):
         pass
 
     @abstractmethod
-    def list_operations(self) -> list[schemes.Operation]:
+    def list_operations(
+        self, date_from: datetime, date_to: datetime
+    ) -> list[schemes.Operation]:
         pass
 
     @abstractmethod

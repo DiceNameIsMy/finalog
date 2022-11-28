@@ -4,3 +4,7 @@ class DomainException(Exception):
 
 class DoesNotExist(DomainException):
     pass
+
+
+class InvalidData(DomainException):
+    pass

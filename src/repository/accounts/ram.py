@@ -1,9 +1,10 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from decimal import Decimal
 import uuid
 
 from repository.accounts import base
 from repository import exc, schemes, enums
+import utils
 
 
 class RAMAccountRepository(base.AccountRepository):
@@ -52,8 +53,15 @@ class RAMAccountRepository(base.AccountRepository):
         self._operations.append(operation)
         return operation
 
-    def list_operations(self) -> list[schemes.Operation]:
-        return self._operations
+    def list_operations(
+        self, date_from: datetime, date_to: datetime
+    ) -> list[schemes.Operation]:
+        operations_in_range: list[schemes.Operation] = []
+        for oper in self._operations:
+            if oper.created_at >= date_from and oper.created_at <= date_to:
+                operations_in_range.append(oper)
+
+        return operations_in_range
 
     def delete_operation(self, id: uuid.UUID) -> None:
         for idx, oper in enumerate(self._operations):
@@ -66,5 +74,4 @@ class RAMAccountRepository(base.AccountRepository):
         return uuid.uuid4()
 
     def _get_created_at_date(self) -> datetime:
-        unaware_utc_timestamp = datetime.utcnow()
-        return unaware_utc_timestamp.replace(tzinfo=timezone.utc)
+        return utils.tz_aware_current_dt()

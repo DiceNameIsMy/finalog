@@ -1,9 +1,11 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Self
 import uuid
 
 from repository.accounts.base import AccountRepository
 from repository import exc as repo_exc
+import utils
 
 from domain import exc, schemes
 
@@ -34,12 +36,21 @@ class AccountDomain:
         repo_operation = self.repository.add_operation(self.account.id, amount)
         return schemes.Operation.from_repo(repo_operation)
 
-    def show_operations(self) -> list[schemes.Operation]:
-        repo_operations = self.repository.list_operations()
+    def show_operations(
+        self, date_from: datetime, date_to: datetime
+    ) -> list[schemes.Operation]:
+        if date_from > date_to:
+            raise exc.InvalidData(
+                "`date_to` parameter should be bigger than `date_from`"
+            )
+
+        repo_operations = self.repository.list_operations(date_from, date_to)
         return [schemes.Operation.from_repo(oper) for oper in repo_operations]
 
     def get_balance(self) -> Decimal:
-        repo_opertaions = self.repository.list_operations()
+        repo_opertaions = self.repository.list_operations(
+            self.account.created_at, utils.tz_aware_current_dt()
+        )
         balance = sum([oper.amount for oper in repo_opertaions], start=Decimal("0.00"))
         return balance
 
