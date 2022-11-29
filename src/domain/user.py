@@ -32,7 +32,13 @@ class UserDomain:
         return cls(user, user_repository, account_repository)
 
     def create_account(self, name: str, currency: enums.Currency) -> schemes.Account:
-        account = self.account_repository.create_account(name, currency, self.user.id)
+        try:
+            account = self.account_repository.create_account(
+                name, currency, self.user.id
+            )
+        except repo_exc.InvalidData as e:
+            raise exc.InvalidData(e.detail)
+
         return schemes.Account.from_repo(account)
 
     def get_accounts(self) -> list[schemes.Account]:

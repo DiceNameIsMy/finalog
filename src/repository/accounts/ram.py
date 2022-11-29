@@ -25,6 +25,13 @@ class RAMAccountRepository(base.AccountRepository):
     def create_account(
         self, name: str, currency: enums.Currency, user_id: uuid.UUID
     ) -> schemes.Account:
+        for accnt in self._accounts:
+            if accnt.user_id == user_id and accnt.name == name:
+                raise exc.InvalidData(
+                    detail="User already have an account with given name",
+                    code="already_exists",
+                )
+
         account = schemes.Account(
             id=self._make_id(),
             name=name,
