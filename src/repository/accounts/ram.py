@@ -74,4 +74,4 @@ class RAMAccountRepository(base.AccountRepository):
         return uuid.uuid4()
 
     def _get_created_at_date(self) -> datetime:
-        return utils.tz_aware_current_dt()
+        return utils.dt.tz_aware_current_dt()

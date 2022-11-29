@@ -49,7 +49,7 @@ class AccountDomain:
 
     def get_balance(self) -> Decimal:
         repo_opertaions = self.repository.list_operations(
-            self.account.created_at, utils.tz_aware_current_dt()
+            self.account.created_at, utils.dt.tz_aware_current_dt()
         )
         balance = sum([oper.amount for oper in repo_opertaions], start=Decimal("0.00"))
         return balance
