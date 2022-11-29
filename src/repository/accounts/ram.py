@@ -42,8 +42,8 @@ class RAMAccountRepository(base.AccountRepository):
         self._accounts.append(account)
         return account
 
-    def available_accounts(self) -> list[schemes.Account]:
-        return self._accounts
+    def list_accounts(self, user_id: uuid.UUID) -> list[schemes.Account]:
+        return list(filter(lambda accnt: accnt.user_id == user_id, self._accounts))
 
     def get_operation(self, id: uuid.UUID) -> schemes.Operation | None:
         for oper in self._operations:

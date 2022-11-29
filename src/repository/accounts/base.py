@@ -12,7 +12,7 @@ class AccountRepository(ABC):
         pass
 
     @abstractmethod
-    def available_accounts(self) -> list[schemes.Account]:
+    def list_accounts(self, user_id: uuid.UUID) -> list[schemes.Account]:
         pass
 
     @abstractmethod

@@ -42,7 +42,7 @@ class UserDomain:
         return schemes.Account.from_repo(account)
 
     def get_accounts(self) -> list[schemes.Account]:
-        accounts = self.account_repository.available_accounts()
+        accounts = self.account_repository.list_accounts(self.user.id)
         return [schemes.Account.from_repo(acc) for acc in accounts]
 
     def create_category(self, name: str) -> schemes.Category:

@@ -31,3 +31,12 @@ class TestCreateAccount:
     ):
         with pytest.raises(domain.exc.InvalidData):
             user_domain.create_account(account.name, repository.enums.Currency.USD)
+
+
+def test_get_available_accounts(
+    user_domain: domain.UserDomain,
+    account: domain.schemes.Account,
+    another_account: domain.schemes.Account,
+):
+    accounts = user_domain.get_accounts()
+    assert len(accounts) == 1
