@@ -10,4 +10,6 @@ class Account:
     id: uuid.UUID
     name: str
     currency: enums.Currency
+    user_id: uuid.UUID
+
     created_at: datetime

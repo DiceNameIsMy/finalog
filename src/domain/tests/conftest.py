@@ -43,8 +43,12 @@ def account_repo() -> repository.AccountRepository:
 
 
 @pytest.fixture()
-def account_id(account_repo: repository.AccountRepository) -> uuid.UUID:
-    account = account_repo.create_account("test_account", repository.enums.Currency.USD)
+def account_id(
+    user_id: uuid.UUID, account_repo: repository.AccountRepository
+) -> uuid.UUID:
+    account = account_repo.create_account(
+        "test_account", repository.enums.Currency.USD, user_id
+    )
     return account.id
 
 

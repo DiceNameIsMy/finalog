@@ -16,7 +16,9 @@ class AccountRepository(ABC):
         pass
 
     @abstractmethod
-    def create_account(self, name: str, currency: enums.Currency) -> schemes.Account:
+    def create_account(
+        self, name: str, currency: enums.Currency, user_id: uuid.UUID
+    ) -> schemes.Account:
         pass
 
     #

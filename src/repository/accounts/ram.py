@@ -22,11 +22,14 @@ class RAMAccountRepository(base.AccountRepository):
                 return acc
         return None
 
-    def create_account(self, name: str, currency: enums.Currency) -> schemes.Account:
+    def create_account(
+        self, name: str, currency: enums.Currency, user_id: uuid.UUID
+    ) -> schemes.Account:
         account = schemes.Account(
             id=self._make_id(),
             name=name,
             currency=currency,
+            user_id=user_id,
             created_at=self._get_created_at_date(),
         )
         self._accounts.append(account)
