@@ -11,30 +11,30 @@ import utils
 class TestShowOperations:
     def test_empty(_, account_domain: domain.AccountDomain):
         available_operations = account_domain.show_operations(
-            account_domain.account.created_at, utils.tz_aware_current_dt()
+            account_domain.account.created_at, utils.dt.tz_aware_current_dt()
         )
         assert len(available_operations) == 0
 
-    def test_(
+    def test_valid(
         _, account_domain: domain.AccountDomain, operation: domain.schemes.Operation
     ):
         available_operations = account_domain.show_operations(
-            account_domain.account.created_at, utils.tz_aware_current_dt()
+            account_domain.account.created_at, utils.dt.tz_aware_current_dt()
         )
         assert len(available_operations) == 1
 
     def test_excluding_date_range(
         _, account_domain: domain.AccountDomain, operation: domain.schemes.Operation
     ):
-        date_from = utils.tz_aware_dt(datetime.utcnow() + timedelta(days=1))
-        date_to = utils.tz_aware_dt(datetime.utcnow() + timedelta(days=2))
+        date_from = utils.dt.tz_aware_dt(datetime.utcnow() + timedelta(days=1))
+        date_to = utils.dt.tz_aware_dt(datetime.utcnow() + timedelta(days=2))
         available_operations = account_domain.show_operations(date_from, date_to)
         assert len(available_operations) == 0
 
     def test_date_to_is_before_date_from(_, account_domain: domain.AccountDomain):
-        date_to = utils.tz_aware_dt(datetime.utcnow() - timedelta(days=1))
+        date_to = utils.dt.tz_aware_dt(datetime.utcnow() - timedelta(days=1))
         with pytest.raises(domain.exc.InvalidData):
-            account_domain.show_operations(utils.tz_aware_current_dt(), date_to)
+            account_domain.show_operations(utils.dt.tz_aware_current_dt(), date_to)
 
 
 def test_get_operation(
@@ -89,7 +89,7 @@ class TestBalance:
         balance = account_domain.get_balance()
         assert balance == Decimal("0.00")
 
-    def test_(
+    def test_valid(
         _,
         account_domain: domain.AccountDomain,
         operation: domain.schemes.Operation,
