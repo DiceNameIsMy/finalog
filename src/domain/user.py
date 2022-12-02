@@ -53,7 +53,7 @@ class UserDomain:
 
         return schemes.Category.from_repo(category)
 
-    def get_categories(self) -> list[schemes.Category]:
+    def show_categories(self) -> list[schemes.Category]:
         available_categories = self.user_repository.list_categories(
             user_id=self.user.id
         )

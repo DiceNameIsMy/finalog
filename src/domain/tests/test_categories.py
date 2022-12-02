@@ -27,6 +27,6 @@ def test_get_categories(
     not_belonging_category: domain.schemes.Category,
     user_domain: domain.UserDomain,
 ):
-    categories = user_domain.get_categories()
+    categories = user_domain.show_categories()
     assert len(categories) == 1
     assert categories[0].id == category.id
