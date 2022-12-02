@@ -1,6 +1,5 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Self
 import uuid
 
 from repository.accounts.base import AccountRepository
@@ -20,7 +19,7 @@ class AccountDomain:
         cls,
         id: uuid.UUID,
         repository: AccountRepository,
-    ) -> Self:  # type: ignore[valid-type]
+    ) -> "AccountDomain":
         """
         Create domain instance from account ID
 

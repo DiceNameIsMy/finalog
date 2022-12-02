@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Self
 from uuid import UUID
 import uuid
 
@@ -20,7 +19,7 @@ class Account:
     def from_repo(
         cls,
         repo_acc: repo.schemes.Account,
-    ) -> Self:  # type: ignore[valid-type]
+    ) -> "Account":
         return cls(
             id=repo_acc.id,
             name=repo_acc.name,
