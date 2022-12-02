@@ -11,6 +11,9 @@ class Category:
 
     user_id: uuid.UUID
 
+    def belong_to_user(self, user_id: uuid.UUID) -> bool:
+        return self.user_id == user_id
+
     @classmethod
     def from_repo(cls, category: repo.schemes.Category) -> "Category":
         return cls(id=category.id, name=category.name, user_id=category.user_id)

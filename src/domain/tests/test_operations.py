@@ -77,18 +77,28 @@ def test_remove_not_existing_operation(account_domain: domain.AccountDomain):
 def test_add_operation(
     account_domain: domain.AccountDomain,
     account_repo: repository.AccountRepository,
-    category_id: uuid.UUID,
+    category: domain.schemes.Category,
 ):
     amount = Decimal("1.00")
-    opertaion = account_domain.add_operation(amount, category_id)
+    opertaion = account_domain.add_operation(amount, category)
 
     assert opertaion.amount == amount
 
     repo_operation = account_repo.get_operation(opertaion.id)
     assert repo_operation is not None
     assert repo_operation.amount == opertaion.amount
-    assert repo_operation.category_id == category_id
+    assert repo_operation.category_id == category.id
     assert repo_operation.created_at == opertaion.created_at
+
+
+def test_add_operation_to_not_belonging_account(
+    account_domain: domain.AccountDomain,
+    account_repo: repository.AccountRepository,
+    not_belonging_category: domain.schemes.Category,
+):
+    amount = Decimal("1.00")
+    with pytest.raises(domain.exc.InvalidData):
+        account_domain.add_operation(amount, not_belonging_category)
 
 
 class TestBalance:

@@ -32,10 +32,12 @@ class AccountDomain:
         return cls(account=account, repository=repository)
 
     def add_operation(
-        self, amount: Decimal, category_id: uuid.UUID
+        self, amount: Decimal, category: schemes.Category
     ) -> schemes.Operation:
+        if not category.belong_to_user(self.account.user_id):
+            raise exc.InvalidData("given category does not belong to account")
         repo_operation = self.repository.add_operation(
-            self.account.id, amount, category_id
+            self.account.id, amount, category.id
         )
         return schemes.Operation.from_repo(repo_operation)
 

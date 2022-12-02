@@ -75,9 +75,11 @@ def account_domain(
 
 
 @pytest.fixture()
-def category(user_id: uuid.UUID, user_repo: repository.UserRepository):
+def category(
+    user_id: uuid.UUID, user_repo: repository.UserRepository
+) -> domain.schemes.Category:
     category = user_repo.create_category("test_category", user_id)
-    return category
+    return domain.schemes.Category.from_repo(category)
 
 
 @pytest.fixture()
@@ -87,10 +89,10 @@ def category_id(category: domain.schemes.Category) -> uuid.UUID:
 
 @pytest.fixture()
 def not_belonging_category(
-    another_user_id: uuid.UUID, user_id: uuid.UUID, user_repo: repository.UserRepository
-):
+    another_user_id: uuid.UUID, user_repo: repository.UserRepository
+) -> domain.schemes.Category:
     category = user_repo.create_category("test_category2", another_user_id)
-    return category
+    return domain.schemes.Category.from_repo(category)
 
 
 @pytest.fixture()
