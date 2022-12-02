@@ -23,6 +23,11 @@ class TestShowOperations:
         )
         assert len(available_operations) == 1
 
+        result_operation = available_operations[0]
+        assert result_operation.id == operation.id
+        assert result_operation.amount == operation.amount
+        assert result_operation.category_id == operation.category_id
+
     def test_excluding_date_range(
         _, account_domain: domain.AccountDomain, operation: domain.schemes.Operation
     ):
@@ -72,15 +77,17 @@ def test_remove_not_existing_operation(account_domain: domain.AccountDomain):
 def test_add_operation(
     account_domain: domain.AccountDomain,
     account_repo: repository.AccountRepository,
+    category_id: uuid.UUID,
 ):
     amount = Decimal("1.00")
-    opertaion = account_domain.add_operation(amount)
+    opertaion = account_domain.add_operation(amount, category_id)
 
     assert opertaion.amount == amount
 
     repo_operation = account_repo.get_operation(opertaion.id)
     assert repo_operation is not None
     assert repo_operation.amount == opertaion.amount
+    assert repo_operation.category_id == category_id
     assert repo_operation.created_at == opertaion.created_at
 
 

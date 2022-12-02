@@ -31,8 +31,12 @@ class AccountDomain:
         account = schemes.Account.from_repo(repo_account)
         return cls(account=account, repository=repository)
 
-    def add_operation(self, amount: Decimal) -> schemes.Operation:
-        repo_operation = self.repository.add_operation(self.account.id, amount)
+    def add_operation(
+        self, amount: Decimal, category_id: uuid.UUID
+    ) -> schemes.Operation:
+        repo_operation = self.repository.add_operation(
+            self.account.id, amount, category_id
+        )
         return schemes.Operation.from_repo(repo_operation)
 
     def show_operations(

@@ -81,6 +81,11 @@ def category(user_id: uuid.UUID, user_repo: repository.UserRepository):
 
 
 @pytest.fixture()
+def category_id(category: domain.schemes.Category) -> uuid.UUID:
+    return category.id
+
+
+@pytest.fixture()
 def not_belonging_category(
     another_user_id: uuid.UUID, user_id: uuid.UUID, user_repo: repository.UserRepository
 ):
@@ -90,26 +95,32 @@ def not_belonging_category(
 
 @pytest.fixture()
 def operation(
-    account_id: uuid.UUID, account_repo: repository.AccountRepository
+    account_id: uuid.UUID,
+    account_repo: repository.AccountRepository,
+    category_id: uuid.UUID,
 ) -> domain.schemes.Operation:
     amount = Decimal("1.99")
-    operation = account_repo.add_operation(account_id, amount)
+    operation = account_repo.add_operation(account_id, amount, category_id)
     return domain.schemes.Operation.from_repo(operation)
 
 
 @pytest.fixture()
 def operation2(
-    account_id: uuid.UUID, account_repo: repository.AccountRepository
+    account_id: uuid.UUID,
+    account_repo: repository.AccountRepository,
+    category_id: uuid.UUID,
 ) -> domain.schemes.Operation:
     amount = Decimal("10.00")
-    operation = account_repo.add_operation(account_id, amount)
+    operation = account_repo.add_operation(account_id, amount, category_id)
     return domain.schemes.Operation.from_repo(operation)
 
 
 @pytest.fixture()
 def negative_operation(
-    account_id: uuid.UUID, account_repo: repository.AccountRepository
+    account_id: uuid.UUID,
+    account_repo: repository.AccountRepository,
+    category_id: uuid.UUID,
 ) -> domain.schemes.Operation:
     amount = Decimal("-10.00")
-    operation = account_repo.add_operation(account_id, amount)
+    operation = account_repo.add_operation(account_id, amount, category_id)
     return domain.schemes.Operation.from_repo(operation)

@@ -29,7 +29,7 @@ class AccountRepository(ABC):
 
     @abstractmethod
     def add_operation(
-        self, account_id: uuid.UUID, amount: Decimal
+        self, account_id: uuid.UUID, amount: Decimal, category_id: uuid.UUID
     ) -> schemes.Operation:
         pass
 

@@ -9,4 +9,5 @@ class Operation:
     id: uuid.UUID
     account_id: uuid.UUID
     amount: Decimal
+    category_id: uuid.UUID
     created_at: datetime

@@ -52,12 +52,13 @@ class RAMAccountRepository(base.AccountRepository):
         return None
 
     def add_operation(
-        self, account_id: uuid.UUID, amount: Decimal
+        self, account_id: uuid.UUID, amount: Decimal, category_id: uuid.UUID
     ) -> schemes.Operation:
         operation = schemes.Operation(
             id=self._make_id(),
             account_id=account_id,
             amount=amount,
+            category_id=category_id,
             created_at=self._get_created_at_date(),
         )
         self._operations.append(operation)
