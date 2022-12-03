@@ -21,6 +21,17 @@ class AccountRepository(ABC):
     ) -> schemes.Account:
         pass
 
+    @abstractmethod
+    def update_account(
+        self,
+        id: uuid.UUID,
+        new_name: str | None = None,
+        new_currency: enums.Currency | None = None,
+    ) -> schemes.Account:
+        """
+        raises: InvalidData
+        """
+
     #
 
     @abstractmethod

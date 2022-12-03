@@ -45,6 +45,33 @@ class RAMAccountRepository(base.AccountRepository):
     def list_accounts(self, user_id: uuid.UUID) -> list[schemes.Account]:
         return list(filter(lambda accnt: accnt.user_id == user_id, self._accounts))
 
+    def update_account(
+        self,
+        id: uuid.UUID,
+        new_name: str | None = None,
+        new_currency: enums.Currency | None = None,
+    ) -> schemes.Account:
+        account = self.get_account(id)
+        if account is None:
+            raise exc.DoesNotExist()
+        if new_name is not None:
+            for acc in self._accounts:
+                if (
+                    acc.id != account.id
+                    and acc.user_id == account.user_id
+                    and acc.name == new_name
+                ):
+                    raise exc.InvalidData(
+                        detail="User Already has account with given name",
+                        code="name_is_taken",
+                    )
+            account.name = new_name
+
+        if new_currency is not None:
+            account.currency = new_currency
+
+        return account
+
     def get_operation(self, id: uuid.UUID) -> schemes.Operation | None:
         for oper in self._operations:
             if oper.id == id:

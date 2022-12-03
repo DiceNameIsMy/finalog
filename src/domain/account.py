@@ -31,6 +31,18 @@ class AccountDomain:
         account = schemes.Account.from_repo(repo_account)
         return cls(account=account, repository=repository)
 
+    def set_new_name(self, new_name: str) -> schemes.Account:
+        if len(new_name) == 0:
+            raise exc.InvalidData()
+        if len(new_name) >= 32:
+            raise exc.InvalidData()
+        try:
+            account = self.repository.update_account(self.account.id, new_name=new_name)
+        except repo_exc.InvalidData:
+            raise exc.InvalidData()
+        self.account = schemes.Account.from_repo(account)
+        return self.account
+
     def add_operation(
         self, amount: Decimal, category: schemes.Category
     ) -> schemes.Operation:

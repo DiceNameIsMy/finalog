@@ -58,11 +58,21 @@ def account_id(account: domain.schemes.Account) -> uuid.UUID:
 
 
 @pytest.fixture()
+def account2(
+    user_id: uuid.UUID, account_repo: repository.AccountRepository
+) -> domain.schemes.Account:
+    account = account_repo.create_account(
+        "test_account2", repository.enums.Currency.CZK, user_id
+    )
+    return domain.schemes.Account.from_repo(account)
+
+
+@pytest.fixture()
 def another_account(
     another_user_id: uuid.UUID, account_repo: repository.AccountRepository
 ) -> domain.schemes.Account:
     account = account_repo.create_account(
-        "test_account", repository.enums.Currency.USD, another_user_id
+        "test_another_account", repository.enums.Currency.USD, another_user_id
     )
     return domain.schemes.Account.from_repo(account)
 
