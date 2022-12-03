@@ -1,3 +1,4 @@
+import uuid
 import pytest
 
 import repository
@@ -30,3 +31,26 @@ def test_get_categories(
     categories = user_domain.show_categories()
     assert len(categories) == 1
     assert categories[0].id == category.id
+
+
+class TestGetCategory:
+    def test_valid(
+        _, user_domain: domain.UserDomain, category: domain.schemes.Category
+    ):
+        ctgr = user_domain.get_category(category.id)
+        assert ctgr.id == category.id
+        assert ctgr.name == category.name
+        assert ctgr.user_id == category.user_id
+
+    def test_does_not_exist(_, user_domain: domain.UserDomain):
+        fake_id = uuid.uuid4()
+        with pytest.raises(domain.exc.DoesNotExist):
+            user_domain.get_category(fake_id)
+
+    def test_does_not_have_access(
+        _,
+        user_domain: domain.UserDomain,
+        not_belonging_category: domain.schemes.Category,
+    ):
+        with pytest.raises(domain.exc.DoesNotExist):
+            user_domain.get_category(not_belonging_category.id)
