@@ -64,14 +64,6 @@ class AccountDomain:
         repo_operations = self.repository.list_operations(date_from, date_to)
         return [schemes.Operation.from_repo(oper) for oper in repo_operations]
 
-    def get_balance(self) -> Decimal:
-        repo_opertaions = self.repository.list_operations(
-            self.account.created_at, utils.dt.tz_aware_current_dt()
-        )
-        operations = [schemes.Operation.from_repo(oper) for oper in repo_opertaions]
-        balance = self.account.get_balance(operations)
-        return balance
-
     def remove_operation(self, id: uuid.UUID) -> None:
         try:
             self.repository.delete_operation(id=id)
@@ -84,3 +76,11 @@ class AccountDomain:
             raise exc.DoesNotExist()
 
         return schemes.Operation.from_repo(repo_operation)
+
+    def get_balance(self) -> Decimal:
+        repo_opertaions = self.repository.list_operations(
+            self.account.created_at, utils.dt.tz_aware_current_dt()
+        )
+        operations = [schemes.Operation.from_repo(oper) for oper in repo_opertaions]
+        balance = self.account.get_balance(operations)
+        return balance
