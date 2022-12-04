@@ -11,6 +11,7 @@ import repository as repo
 class Operation:
     id: UUID
     amount: Decimal
+    account_id: uuid.UUID
     category_id: uuid.UUID
     created_at: datetime
 
@@ -22,6 +23,7 @@ class Operation:
         return cls(
             id=repo_oper.id,
             amount=repo_oper.amount,
+            account_id=repo_oper.account_id,
             category_id=repo_oper.category_id,
             created_at=repo_oper.created_at,
         )
