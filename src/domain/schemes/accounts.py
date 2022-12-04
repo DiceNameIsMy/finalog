@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from decimal import Decimal
 from uuid import UUID
 import uuid
 
@@ -11,6 +12,7 @@ class Account:
     id: UUID
     name: str
     currency: repo.enums.Currency
+    base_balance: Decimal
     user_id: uuid.UUID
 
     created_at: datetime
@@ -24,6 +26,7 @@ class Account:
             id=repo_acc.id,
             name=repo_acc.name,
             currency=repo_acc.currency,
+            base_balance=repo_acc.base_balance,
             user_id=repo_acc.user_id,
             created_at=repo_acc.created_at,
         )

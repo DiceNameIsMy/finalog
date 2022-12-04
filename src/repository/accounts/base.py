@@ -17,7 +17,11 @@ class AccountRepository(ABC):
 
     @abstractmethod
     def create_account(
-        self, name: str, currency: enums.Currency, user_id: uuid.UUID
+        self,
+        name: str,
+        currency: enums.Currency,
+        base_balance: Decimal,
+        user_id: uuid.UUID,
     ) -> schemes.Account:
         pass
 

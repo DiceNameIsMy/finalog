@@ -1,3 +1,4 @@
+from decimal import Decimal
 import pytest
 import uuid
 
@@ -18,11 +19,19 @@ class TestMakeAccountDomain:
 
 
 class TestCreateAccount:
-    def test_valid(_, user_domain: domain.UserDomain):
-        account = user_domain.create_account(
-            "new_account", repository.enums.Currency.USD
+    def test_valid(
+        _, user_domain: domain.UserDomain, account_repo: repository.AccountRepository
+    ):
+        domain_account = user_domain.create_account(
+            "new_account", repository.enums.Currency.USD, Decimal(0)
         )
-        assert account.user_id == user_domain.user.id
+        repo_account = account_repo.get_account(domain_account.id)
+        assert repo_account is not None
+
+        assert repo_account.user_id == user_domain.user.id
+        assert repo_account.name == "new_account"
+        assert repo_account.currency == repository.enums.Currency.USD
+        assert repo_account.base_balance == Decimal(0)
 
     def test_already_have_account_with_given_name(
         _,
@@ -30,7 +39,9 @@ class TestCreateAccount:
         user_domain: domain.UserDomain,
     ):
         with pytest.raises(domain.exc.InvalidData):
-            user_domain.create_account(account.name, repository.enums.Currency.USD)
+            user_domain.create_account(
+                account.name, repository.enums.Currency.USD, Decimal(0)
+            )
 
 
 def test_get_available_accounts(

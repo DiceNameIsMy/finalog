@@ -1,3 +1,4 @@
+from decimal import Decimal
 import uuid
 
 from repository import enums, AccountRepository, UserRepository
@@ -31,10 +32,12 @@ class UserDomain:
         user = schemes.User.from_repo(repo_user)
         return cls(user, user_repository, account_repository)
 
-    def create_account(self, name: str, currency: enums.Currency) -> schemes.Account:
+    def create_account(
+        self, name: str, currency: enums.Currency, base_balance: Decimal
+    ) -> schemes.Account:
         try:
             account = self.account_repository.create_account(
-                name, currency, self.user.id
+                name, currency, base_balance, self.user.id
             )
         except repo_exc.InvalidData as e:
             raise exc.InvalidData(e.detail)

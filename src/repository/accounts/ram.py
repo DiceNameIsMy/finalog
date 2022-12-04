@@ -23,7 +23,11 @@ class RAMAccountRepository(base.AccountRepository):
         return None
 
     def create_account(
-        self, name: str, currency: enums.Currency, user_id: uuid.UUID
+        self,
+        name: str,
+        currency: enums.Currency,
+        base_balance: Decimal,
+        user_id: uuid.UUID,
     ) -> schemes.Account:
         for accnt in self._accounts:
             if accnt.user_id == user_id and accnt.name == name:
@@ -36,6 +40,7 @@ class RAMAccountRepository(base.AccountRepository):
             id=self._make_id(),
             name=name,
             currency=currency,
+            base_balance=base_balance,
             user_id=user_id,
             created_at=self._get_created_at_date(),
         )
