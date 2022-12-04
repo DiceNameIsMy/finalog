@@ -102,24 +102,27 @@ def test_add_operation_to_not_belonging_account(
 
 
 class TestBalance:
-    def test_empty(_, account_domain: domain.AccountDomain):
+    def test_empty(
+        _, account: domain.schemes.Account, account_domain: domain.AccountDomain
+    ):
         balance = account_domain.get_balance()
-        assert balance == Decimal("0.00")
+        assert balance == account.base_balance
 
     def test_valid(
         _,
+        account: domain.schemes.Account,
         account_domain: domain.AccountDomain,
         operation: domain.schemes.Operation,
         operation2: domain.schemes.Operation,
     ):
         balance = account_domain.get_balance()
-        assert balance == sum((operation.amount, operation2.amount), Decimal("0.00"))
+        assert balance == (account.base_balance + operation.amount + operation2.amount)
 
     def test_negative(
         _,
+        account: domain.schemes.Account,
         account_domain: domain.AccountDomain,
         negative_operation: domain.schemes.Operation,
     ):
         balance = account_domain.get_balance()
-        assert balance < Decimal("0.00")
-        assert balance == negative_operation.amount
+        assert balance == (account.base_balance + negative_operation.amount)

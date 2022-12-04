@@ -68,7 +68,8 @@ class AccountDomain:
         repo_opertaions = self.repository.list_operations(
             self.account.created_at, utils.dt.tz_aware_current_dt()
         )
-        balance = sum([oper.amount for oper in repo_opertaions], start=Decimal("0.00"))
+        operations = [schemes.Operation.from_repo(oper) for oper in repo_opertaions]
+        balance = self.account.get_balance(operations)
         return balance
 
     def remove_operation(self, id: uuid.UUID) -> None:

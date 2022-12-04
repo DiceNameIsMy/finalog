@@ -1,10 +1,15 @@
 import uuid
+import random
 from decimal import Decimal
 
 import pytest
 
 import repository
 import domain
+
+
+def get_random_balance() -> Decimal:
+    return Decimal(format(random.uniform(0, 10), ".2g"))
 
 
 @pytest.fixture()
@@ -47,7 +52,7 @@ def account(
     user_id: uuid.UUID, account_repo: repository.AccountRepository
 ) -> domain.schemes.Account:
     account = account_repo.create_account(
-        "test_account", repository.enums.Currency.USD, Decimal(0), user_id
+        "test_account", repository.enums.Currency.USD, get_random_balance(), user_id
     )
     return domain.schemes.Account.from_repo(account)
 
@@ -62,7 +67,7 @@ def account2(
     user_id: uuid.UUID, account_repo: repository.AccountRepository
 ) -> domain.schemes.Account:
     account = account_repo.create_account(
-        "test_account2", repository.enums.Currency.CZK, Decimal("0.50"), user_id
+        "test_account2", repository.enums.Currency.CZK, get_random_balance(), user_id
     )
     return domain.schemes.Account.from_repo(account)
 
@@ -74,7 +79,7 @@ def another_account(
     account = account_repo.create_account(
         "test_another_account",
         repository.enums.Currency.USD,
-        Decimal(0),
+        get_random_balance(),
         another_user_id,
     )
     return domain.schemes.Account.from_repo(account)

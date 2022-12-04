@@ -6,6 +6,8 @@ import uuid
 
 import repository as repo
 
+from domain.schemes.operations import Operation
+
 
 @dataclass
 class Account:
@@ -30,3 +32,10 @@ class Account:
             user_id=repo_acc.user_id,
             created_at=repo_acc.created_at,
         )
+
+    def get_balance(self, all_operations: list[Operation]) -> Decimal:
+        balance = self.base_balance
+        for oper in all_operations:
+            assert oper.account_id == self.id
+            balance += oper.amount
+        return balance
