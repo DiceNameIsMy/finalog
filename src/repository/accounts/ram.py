@@ -53,27 +53,27 @@ class RAMAccountRepository(base.AccountRepository):
     def update_account(
         self,
         id: uuid.UUID,
-        new_name: str | None = None,
-        new_currency: enums.Currency | None = None,
+        name: str | None = None,
+        currency: enums.Currency | None = None,
     ) -> schemes.Account:
         account = self.get_account(id)
         if account is None:
             raise exc.DoesNotExist()
-        if new_name is not None:
+        if name is not None:
             for acc in self._accounts:
                 if (
                     acc.id != account.id
                     and acc.user_id == account.user_id
-                    and acc.name == new_name
+                    and acc.name == name
                 ):
                     raise exc.InvalidData(
                         detail="User Already has account with given name",
                         code="name_is_taken",
                     )
-            account.name = new_name
+            account.name = name
 
-        if new_currency is not None:
-            account.currency = new_currency
+        if currency is not None:
+            account.currency = currency
 
         return account
 

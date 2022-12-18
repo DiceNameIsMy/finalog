@@ -29,8 +29,8 @@ class AccountRepository(ABC):
     def update_account(
         self,
         id: uuid.UUID,
-        new_name: str | None = None,
-        new_currency: enums.Currency | None = None,
+        name: str | None = None,
+        currency: enums.Currency | None = None,
     ) -> schemes.Account:
         """
         raises: InvalidData

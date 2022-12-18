@@ -37,7 +37,7 @@ class AccountDomain:
         if len(new_name) >= 32:
             raise exc.InvalidData()
         try:
-            account = self.repository.update_account(self.account.id, new_name=new_name)
+            account = self.repository.update_account(self.account.id, name=new_name)
         except repo_exc.InvalidData:
             raise exc.InvalidData()
         self.account = schemes.Account.from_repo(account)
