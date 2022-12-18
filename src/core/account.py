@@ -6,7 +6,7 @@ from repository.accounts.base import AccountRepository
 from repository import exc as repo_exc
 import utils
 
-from domain import exc, schemes
+from core import exc, schemes
 
 
 class AccountDomain:

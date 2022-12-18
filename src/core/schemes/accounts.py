@@ -6,7 +6,7 @@ import uuid
 
 import repository as repo
 
-from domain.schemes.operations import Operation
+from core.schemes.operations import Operation
 
 
 @dataclass

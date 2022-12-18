@@ -2,7 +2,7 @@ import uuid
 import pytest
 
 import repository
-import domain
+import core
 
 
 class TestMakeUserDomain:
@@ -12,7 +12,7 @@ class TestMakeUserDomain:
         user_repo: repository.UserRepository,
         account_repo: repository.AccountRepository,
     ):
-        user_domain = domain.UserDomain.from_id(user_id, user_repo, account_repo)
+        user_domain = core.UserDomain.from_id(user_id, user_repo, account_repo)
         assert user_domain.user.id == user_id
 
     def test_not_existing_id(
@@ -22,4 +22,4 @@ class TestMakeUserDomain:
     ):
         not_existing_user_id = uuid.uuid4()
         with pytest.raises(repository.exc.DoesNotExist):
-            domain.UserDomain.from_id(not_existing_user_id, user_repo, account_repo)
+            core.UserDomain.from_id(not_existing_user_id, user_repo, account_repo)

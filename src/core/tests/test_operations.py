@@ -4,19 +4,19 @@ import uuid
 from decimal import Decimal
 
 import repository
-import domain
+import core
 import utils
 
 
 class TestShowOperations:
-    def test_empty(_, account_domain: domain.AccountDomain):
+    def test_empty(_, account_domain: core.AccountDomain):
         available_operations = account_domain.show_operations(
             account_domain.account.created_at, utils.dt.tz_aware_current_dt()
         )
         assert len(available_operations) == 0
 
     def test_valid(
-        _, account_domain: domain.AccountDomain, operation: domain.schemes.Operation
+        _, account_domain: core.AccountDomain, operation: core.schemes.Operation
     ):
         available_operations = account_domain.show_operations(
             account_domain.account.created_at, utils.dt.tz_aware_current_dt()
@@ -29,37 +29,37 @@ class TestShowOperations:
         assert result_operation.category_id == operation.category_id
 
     def test_excluding_date_range(
-        _, account_domain: domain.AccountDomain, operation: domain.schemes.Operation
+        _, account_domain: core.AccountDomain, operation: core.schemes.Operation
     ):
         date_from = utils.dt.tz_aware_dt(datetime.utcnow() + timedelta(days=1))
         date_to = utils.dt.tz_aware_dt(datetime.utcnow() + timedelta(days=2))
         available_operations = account_domain.show_operations(date_from, date_to)
         assert len(available_operations) == 0
 
-    def test_date_to_is_before_date_from(_, account_domain: domain.AccountDomain):
+    def test_date_to_is_before_date_from(_, account_domain: core.AccountDomain):
         date_to = utils.dt.tz_aware_dt(datetime.utcnow() - timedelta(days=1))
-        with pytest.raises(domain.exc.InvalidData):
+        with pytest.raises(core.exc.InvalidData):
             account_domain.show_operations(utils.dt.tz_aware_current_dt(), date_to)
 
 
 def test_get_operation(
-    account_domain: domain.AccountDomain,
-    operation: domain.schemes.Operation,
+    account_domain: core.AccountDomain,
+    operation: core.schemes.Operation,
 ):
     operation_from_domain = account_domain.get_operation(operation.id)
     assert operation_from_domain.amount == operation.amount
     assert operation_from_domain.created_at == operation.created_at
 
 
-def test_get_not_existing_operation(account_domain: domain.AccountDomain):
+def test_get_not_existing_operation(account_domain: core.AccountDomain):
     operation_id = uuid.uuid4()
-    with pytest.raises(domain.exc.DoesNotExist):
+    with pytest.raises(core.exc.DoesNotExist):
         account_domain.get_operation(operation_id)
 
 
 def test_remove_operation(
-    account_domain: domain.AccountDomain,
-    operation: domain.schemes.Operation,
+    account_domain: core.AccountDomain,
+    operation: core.schemes.Operation,
     account_repo: repository.AccountRepository,
 ):
     account_domain.remove_operation(operation.id)
@@ -68,16 +68,16 @@ def test_remove_operation(
     assert deleted_opertaion is None
 
 
-def test_remove_not_existing_operation(account_domain: domain.AccountDomain):
+def test_remove_not_existing_operation(account_domain: core.AccountDomain):
     operation_id = uuid.uuid4()
-    with pytest.raises(domain.exc.DoesNotExist):
+    with pytest.raises(core.exc.DoesNotExist):
         account_domain.remove_operation(operation_id)
 
 
 def test_add_operation(
-    account_domain: domain.AccountDomain,
+    account_domain: core.AccountDomain,
     account_repo: repository.AccountRepository,
-    category: domain.schemes.Category,
+    category: core.schemes.Category,
 ):
     amount = Decimal("1.00")
     opertaion = account_domain.add_operation(amount, category)
@@ -92,37 +92,37 @@ def test_add_operation(
 
 
 def test_add_operation_to_not_belonging_account(
-    account_domain: domain.AccountDomain,
+    account_domain: core.AccountDomain,
     account_repo: repository.AccountRepository,
-    not_belonging_category: domain.schemes.Category,
+    not_belonging_category: core.schemes.Category,
 ):
     amount = Decimal("1.00")
-    with pytest.raises(domain.exc.InvalidData):
+    with pytest.raises(core.exc.InvalidData):
         account_domain.add_operation(amount, not_belonging_category)
 
 
 class TestBalance:
     def test_empty(
-        _, account: domain.schemes.Account, account_domain: domain.AccountDomain
+        _, account: core.schemes.Account, account_domain: core.AccountDomain
     ):
         balance = account_domain.get_balance()
         assert balance == account.base_balance
 
     def test_valid(
         _,
-        account: domain.schemes.Account,
-        account_domain: domain.AccountDomain,
-        operation: domain.schemes.Operation,
-        operation2: domain.schemes.Operation,
+        account: core.schemes.Account,
+        account_domain: core.AccountDomain,
+        operation: core.schemes.Operation,
+        operation2: core.schemes.Operation,
     ):
         balance = account_domain.get_balance()
         assert balance == (account.base_balance + operation.amount + operation2.amount)
 
     def test_negative(
         _,
-        account: domain.schemes.Account,
-        account_domain: domain.AccountDomain,
-        negative_operation: domain.schemes.Operation,
+        account: core.schemes.Account,
+        account_domain: core.AccountDomain,
+        negative_operation: core.schemes.Operation,
     ):
         balance = account_domain.get_balance()
         assert balance == (account.base_balance + negative_operation.amount)

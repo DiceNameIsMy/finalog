@@ -4,7 +4,7 @@ import uuid
 from repository import enums, AccountRepository, UserRepository
 from repository import exc as repo_exc
 
-from domain import schemes, exc
+from core import schemes, exc
 
 
 class UserDomain:
